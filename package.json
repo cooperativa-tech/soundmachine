@@ -1,5 +1,6 @@
 {
   "name": "buttons",
+  "homepage": "https://cooperativa.tech/soundmachine",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
