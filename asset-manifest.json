@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.js": "/soundmachine/static/js/main.5a4c837e.chunk.js",
-    "main.js.map": "/soundmachine/static/js/main.5a4c837e.chunk.js.map",
+    "main.js": "/soundmachine/static/js/main.0ce5cbfe.chunk.js",
+    "main.js.map": "/soundmachine/static/js/main.0ce5cbfe.chunk.js.map",
     "runtime~main.js": "/soundmachine/static/js/runtime~main.ecc5bb31.js",
     "runtime~main.js.map": "/soundmachine/static/js/runtime~main.ecc5bb31.js.map",
-    "static/js/2.0d1a789f.chunk.js": "/soundmachine/static/js/2.0d1a789f.chunk.js",
-    "static/js/2.0d1a789f.chunk.js.map": "/soundmachine/static/js/2.0d1a789f.chunk.js.map",
-    "53fd6010bda2b6cab0fd.worker.js": "/soundmachine/53fd6010bda2b6cab0fd.worker.js",
-    "53fd6010bda2b6cab0fd.worker.js.map": "/soundmachine/53fd6010bda2b6cab0fd.worker.js.map",
+    "static/js/2.e0f3394b.chunk.js": "/soundmachine/static/js/2.e0f3394b.chunk.js",
+    "static/js/2.e0f3394b.chunk.js.map": "/soundmachine/static/js/2.e0f3394b.chunk.js.map",
+    "073907d942ba524238ae.worker.js": "/soundmachine/073907d942ba524238ae.worker.js",
+    "073907d942ba524238ae.worker.js.map": "/soundmachine/073907d942ba524238ae.worker.js.map",
     "index.html": "/soundmachine/index.html",
-    "precache-manifest.fcbaeeb7e949f8082d6125203398782f.js": "/soundmachine/precache-manifest.fcbaeeb7e949f8082d6125203398782f.js",
+    "precache-manifest.193814557ef637bfc783a5e44760ba8b.js": "/soundmachine/precache-manifest.193814557ef637bfc783a5e44760ba8b.js",
     "service-worker.js": "/soundmachine/service-worker.js",
     "static/media/face.png": "/soundmachine/static/media/face.f302813b.png",
     "static/media/mouth.png": "/soundmachine/static/media/mouth.9227568e.png"
