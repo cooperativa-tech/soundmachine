@@ -82,7 +82,7 @@ async function handleDownload(hash) {
     files.map(async file => {
       const gotFile = (await node.get(file.hash))[0];
       console.log(gotFile.content.buffer);
-      db.keys.put({
+      return db.keys.put({
         blob: new Blob([gotFile.content.buffer], {
           type: "audio/ogg; codecs=opus"
         }),

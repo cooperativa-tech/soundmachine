@@ -1,152 +1,49 @@
 /** @jsx jsx */
 
 import _ from "lodash";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Global, css, jsx } from "@emotion/core";
 import Popup from "reactjs-popup";
 
 import { Key, Row } from "../components/Keys";
 import { Jorge } from "../components/Jorge";
-import { KeyboardNameInput } from "../components/KeyboardNameInput";
+import { Share } from "../components/Share";
+import { Download } from "../components/Download";
 import globalState from "../state";
 import db from "../db";
-import { share, download } from "../ipfs";
 
 const FIRST_ROW = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
 const SECOND_ROW = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
 const THIRD_ROW = ["z", "x", "c", "v", "b", "n", "m"];
 const ALL_KEYS = [...FIRST_ROW, ...SECOND_ROW, ...THIRD_ROW];
 
-const hashInQueryParams = querystring("hash")[0];
-
 window.navigator.mediaDevices
   .getUserMedia({
     audio: true
   })
   .then(stream => {
-    globalState.mediaRecorder = new MediaRecorder(stream);
+    try {
+      globalState.mediaRecorder = new MediaRecorder(stream);
 
-    globalState.mediaRecorder.ondataavailable = function(e) {
-      if (globalState.recording) {
-        globalState.chunks.push(e.data);
-      }
-    };
+      globalState.mediaRecorder.ondataavailable = function(e) {
+        if (globalState.recording) {
+          globalState.chunks.push(e.data);
+        }
+      };
 
-    globalState.mediaRecorder.onstop = () => {
-      const blob = new Blob(globalState.chunks, {
-        type: "audio/ogg; codecs=opus"
-      });
-      globalState.chunks = [];
-      globalState.lastRecordingBlob = blob;
-      globalState.lastRecordingURL = window.URL.createObjectURL(blob);
-    };
+      globalState.mediaRecorder.onstop = () => {
+        const blob = new Blob(globalState.chunks, {
+          type: "audio/ogg; codecs=opus"
+        });
+        globalState.chunks = [];
+        globalState.lastRecordingBlob = blob;
+        globalState.lastRecordingURL = window.URL.createObjectURL(blob);
+      };
+    } catch (e) {
+      console.error(e);
+    }
   })
   .catch(err => console.error(err));
-
-function querystring(obj) {
-  const result = [];
-  let match;
-  const re = new RegExp("(?:\\?|&)" + obj + "=(.*?)(?=&|$)", "gi");
-  while ((match = re.exec(document.location.search)) !== null) {
-    result.push(match[1]);
-  }
-  return result;
-}
-
-function Share() {
-  const [state, setState] = useState({ hash: null, name: null });
-
-  useEffect(() => {
-    if (state.name && state.hash) {
-      db.keyboards.put(state);
-    }
-  }, [state]);
-
-  return (
-    <Popup
-      trigger={
-        <button
-          css={{
-            backgroundColor: "#2D2D2D",
-            color: "white",
-            fontSize: 20,
-            padding: `10px 20px`,
-            marginRight: 40,
-            borderRadius: 4
-          }}
-        >
-          Save and Share
-        </button>
-      }
-      modal
-      position="right center"
-      onOpen={() => {
-        globalState.sharingFocused = true;
-
-        share().then(async hash => {
-          await db.keyboards.put({ hash, name: "my random name" });
-          setState({ ...state, hash });
-        });
-      }}
-      onClose={() => {
-        globalState.sharingFocused = false;
-        setState({ hash: null, name: null });
-      }}
-      contentStyle={{ padding: 40, borderRadius: 4 }}
-    >
-      <>
-        {!state.name ? (
-          <KeyboardNameInput
-            onComplete={name => setState({ ...state, name })}
-          />
-        ) : !state.hash ? (
-          <div>loading...</div>
-        ) : (
-          <div>
-            Share this link:{" "}
-            <a
-              href={`${window.location}?hash=${state.hash}`}
-            >{`${window.location}?hash=${state.hash}`}</a>
-          </div>
-        )}
-      </>
-    </Popup>
-  );
-}
-
-function Download() {
-  const [loading, setLoading] = useState(false);
-
-  const handleDownload = async () => {
-    setLoading(true);
-    await download(hashInQueryParams);
-    window.location = window.location.origin;
-  };
-
-  return hashInQueryParams ? (
-    <Popup contentStyle={{ padding: 40 }} modal open>
-      {loading ? (
-        <div>loading...</div>
-      ) : (
-        <>
-          <div css={{ marginBottom: 20 }}>
-            Do you want to replace your existing keyboard with the new one?
-          </div>
-          <button onClick={handleDownload} css={{ marginRight: 20 }}>
-            Yes!
-          </button>
-          <button
-            onClick={() => {
-              window.location = window.location.origin;
-            }}
-          >
-            No
-          </button>
-        </>
-      )}
-    </Popup>
-  ) : null;
-}
 
 function Keyboards() {
   const [keyboards, setKeyboards] = useState([]);
@@ -188,7 +85,9 @@ function Keyboards() {
               ))}
             </ul>
           </>
-        ) : null}
+        ) : (
+          <p>You don't have any saved saved keyboards.</p>
+        )}
       </div>
     </Popup>
   );
@@ -303,6 +202,10 @@ class Player extends React.Component {
         resolve(request.response);
       };
 
+      request.onerror = function() {
+        console.error(arguments);
+      };
+
       request.send();
     });
   };
@@ -348,6 +251,7 @@ class Player extends React.Component {
     globalState.audioContext.decodeAudioData(
       response,
       buffer => {
+        console.log("buffer", buffer);
         globalState.sourceNode.buffer = buffer;
         globalState.sourceNode.loop = false;
         globalState.sourceNode.start(0);

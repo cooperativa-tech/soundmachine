@@ -1,4 +1,5 @@
-const audioContext = new AudioContext();
+const Context = window.AudioContext || window.webkitAudioContext;
+const audioContext = new Context();
 const analyser = audioContext.createScriptProcessor(4096, 1, 1);
 analyser.connect(audioContext.destination);
 
