@@ -186,10 +186,10 @@ class Player extends React.Component {
     } catch (e) {
       console.warn(e);
     }
-    setImmediate(() => {
+    setTimeout(() => {
       this.saveClip(lowerKey);
       globalState.recording = false;
-    });
+    }, 200);
   };
 
   loadSound = url => {
