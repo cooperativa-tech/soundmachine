@@ -15,8 +15,8 @@ jobs:
         node-version: '10.16'
 
     - run: |
-        npm install
-        npm run build
+        yarn install
+        yarn build
 
     - name: deploy
       uses: peaceiris/actions-gh-pages@v2.4.0

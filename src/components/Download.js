@@ -41,7 +41,7 @@ export function Download() {
           </button>
           <button
             onClick={() => {
-              window.location = window.location.origin;
+              window.location = window.location.href.split("?")[0];
             }}
           >
             No
